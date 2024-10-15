@@ -36,7 +36,7 @@ const Login = (props: Props) => {
     <form onSubmit={onSubmit}>
       <div className="w-screen h-screen bg-sectionOne bg-cover bg-repeat min-h-scree">
         <div className="flex justify-center">
-          <div className="flex mt-20 pb-10 flex-col w-full mx-1 bg-primary-200 rounded-lg md:w-4/12">
+          <div className="flex mt-20 pb-10 flex-col w-full mx-1  rounded-lg md:w-4/12">
             <div className="flex justify-end">
               <div className="mt-2 mr-2 cursor-pointer">
                 <ThemeSwitch />
@@ -44,12 +44,15 @@ const Login = (props: Props) => {
             </div>
             <div className="flex justify-center mx-3">
               <div className="flex-col justify-center md:w-10/12 w-full">
-                <h1 className="text-xl text-center font-bold mt-5">Login</h1>
-                <h1 className="sm:text-[50px] text-center font-bold mt-5">
-                  FindHydroPro
+                <h1 className="text-xl text-center text-default-100 font-bold mt-5">
+                  Selamat Datang
+                </h1>
+                <h1 className="text-[50px] text-center font-bold mt-5 text-default-200">
+                  <span className="text-gray-500 bg-primary-500 px-2">FH</span>
+                  FinHydroPro
                 </h1>
                 {!!error && (
-                  <p className="bg-red-100 text-red-500 text-center p-2">
+                  <p className="text-danger-500 bg-danger-100 text-red-500 text-center p-2">
                     Authentication Failed
                   </p>
                 )}
@@ -61,11 +64,11 @@ const Login = (props: Props) => {
                       onChange={(e) => (userName.current = e.target.value)}
                     />
                   </div>
-                  <div className="flex flex-wrap md:flex-nowrap gap-4">
+                  <div className="flex flex-wrap md:flex-nowrap gap-4 shadow-lg">
                     <Input
                       endContent={
                         <button
-                          className="focus:outline-none"
+                          className=""
                           type="button"
                           onClick={toggleVisibility}
                         >
