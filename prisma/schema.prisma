@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id           Int     @id @default(autoincrement())
+  level        String
+  accessToken  String
+  company      String
+  email        String  @unique
+  nama         String?
+  no_telpon    String
+  password     String
+  refreshToken String
+}
+
+model akunheaders {
+  id               Int    @id @default(autoincrement())
+  kode_akun_header String @unique
+  nama_akun_header String
+}
+
+model company {
+  id           Int    @id @unique @default(autoincrement())
+  nama_company String
+  deskripsi    String
+  alamat       String
+}
+
+model akundetail {
+  id               Int    @id @default(autoincrement())
+  company          String
+  kode_akun_header String
+  kode_akun        String
+  nama_akun        String
+}
+
+model tb_saldo_awal {
+  id        Int    @id @unique @default(autoincrement())
+  company   String
+  kode_akun String
+  bulan     String
+  tahun     String
+  saldo     Int
+}
+
+model tb_produk {
+  id          Int    @id @unique @default(autoincrement())
+  company     String
+  kode_produk String
+  nama_produk String
+  deskripsi   String
+  harga_beli  Int
+  harga_jual  Int
+}
+
+model tb_saldo_awal_produk {
+  id          Int    @id @unique @default(autoincrement())
+  company     String
+  kode_produk String
+  bulan       String
+  tahun       String
+  qty         Int
+}
+
+model tb_transaksi_header {
+  id               Int    @id @unique @default(autoincrement())
+  company          String
+  kode_transaksi   String @unique
+  tgl_transaksi    String
+  jenis_transaksi  String
+  deksripsi        String
+  user             String
+  status_transaksi String
+}
+
+model tb_transaksi_detail {
+  id             Int    @id @unique @default(autoincrement())
+  kode_transaksi String
+  kode_produk    String
+  qty            Int
+  harga          Int
+}
+
+model tb_transaksi_detail_jurnal {
+  id             Int    @id @unique @default(autoincrement())
+  kode_transaksi String
+  no_akun        String
+  debet          Int    @default(0)
+  kredit         Int    @default(0)
+}
+
+model tb_user_customer {
+  id               Int    @id @unique @default(autoincrement())
+  nama             String
+  email            String @unique
+  level            Int
+  no_telpon        String @unique
+  alamat           String
+  password         String @default("")
+  status           String @default("0")
+  customer_company String
+}
+
+model tb_keranjang {
+  id          Int    @id @unique @default(autoincrement())
+  id_customer String
+  kode_produk String
+  qty         String
+}
+
+model mapping_transaksi {
+  id              Int    @id @unique @default(autoincrement())
+  jenis_transaksi String
+  kode_akun       String
+  posisi          String
+}
