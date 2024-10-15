@@ -76,8 +76,7 @@
     "typescript": "^5.6.2",
     "zod": "^3.23.8"
   },
-  "description": "This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).",
-  "main": "next.config.js",
+  "description": "Accounting Application",
   "keywords": [],
   "author": "",
   "license": "ISC",
