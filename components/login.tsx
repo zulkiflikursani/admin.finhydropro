@@ -34,7 +34,7 @@ const Login = (props: Props) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="w-screen h-screen">
+      <div className="w-screen h-screen bg-sectionOne bg-cover bg-repeat min-h-scree">
         <div className="flex justify-center">
           <div className="flex mt-20 pb-10 flex-col w-full mx-1 bg-primary-200 rounded-lg md:w-4/12">
             <div className="flex justify-end">
