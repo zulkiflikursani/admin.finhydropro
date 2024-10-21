@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { generateJurnal } from "../jurnal/generate";
+import { it } from "node:test";
 interface TypeTransaksiHeader {
   company: string;
   kode_transaksi: string;
@@ -90,6 +91,7 @@ export async function createPenjualan(req: TransaksiHeaderType) {
   const dataDetail1: TransaksiDetailDataType[] = await req.data.map((item) => ({
     kode_transaksi: kode_transaksi,
     kode_produk: item.kode_produk,
+    nama_produk: item.nama_produk,
     qty: -item.qty,
     harga_jual: item.harga_jual,
     harga_beli: item.harga_beli,

@@ -24,8 +24,8 @@ async function page({ params }: { params: { id: string } }) {
           kode_produk: detailTransaksi.kode_produk,
           nama_produk: detailTransaksi.nama_produk,
           qty: detailTransaksi.qty,
-          harga_beli: detailTransaksi.harga,
-          harga_jual: 0,
+          harga_beli: detailTransaksi.harga_beli,
+          harga_jual: detailTransaksi.harga_jual,
         },
       ],
     }));
