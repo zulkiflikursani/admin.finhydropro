@@ -14,6 +14,7 @@ interface Props {
 }
 
 function TableInputPembelian(props: Props) {
+  // console.log(props.dataPembelian);
   return (
     <div>
       <table className="w-full">
@@ -35,11 +36,17 @@ function TableInputPembelian(props: Props) {
                   className="bg-foreground-50 rounded-xl"
                   defaultItems={props.produk}
                   labelPlacement="inside"
+                  inputValue={
+                    row.nama_produk !== undefined
+                      ? row?.nama_produk.toString()
+                      : "0"
+                  }
                   name={"kode_produk"}
                   placeholder="Pilih Produk"
                   size="sm"
                   variant="bordered"
                   onInputChange={(e) => props.handleData(e, i)}
+                  onChange={(e) => props.handleData(e.target.value, i)}
                 >
                   {(item) => (
                     <AutocompleteItem
@@ -62,6 +69,7 @@ function TableInputPembelian(props: Props) {
                   name="qty"
                   size="sm"
                   type="number"
+                  value={row.qty !== undefined ? row?.qty.toString() : "0"}
                   onChange={(e) =>
                     props.handleChangeQty(Number(e.target.value), i)
                   }

@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@nextui-org/button";
+import { Link } from "@nextui-org/link";
 import React from "react";
 interface DataPenjualanType {
   id: number;
@@ -50,25 +51,51 @@ function TableValidPenjualan(data: PropsType) {
                   </td>
                   <td className="text-center border border-foreground-200 items-center">
                     {item.status_transaksi === "1" ? (
-                      <Button
-                        color="warning"
-                        size="sm"
-                        onClick={(e) =>
-                          data.handleUnvalidate(item.kode_transaksi)
-                        }
-                      >
-                        Unvalidasi
-                      </Button>
+                      <>
+                        <Button
+                          color="warning"
+                          size="sm"
+                          onClick={(e) =>
+                            data.handleUnvalidate(item.kode_transaksi)
+                          }
+                        >
+                          Unvalidasi
+                        </Button>
+                        <Link
+                          className="ml-2 text-sm rounded-lg bg-warning-100 text-warning-800 px-3 py-1.5"
+                          href={
+                            item.jenis_transaksi === "2"
+                              ? `/admin/penjualan/${item.kode_transaksi}/edit`
+                              : `/admin/pembelian/${item.kode_transaksi}/edit`
+                          }
+                          color="primary"
+                        >
+                          Detail
+                        </Link>
+                      </>
                     ) : (
-                      <Button
-                        color="primary"
-                        size="sm"
-                        onClick={(e) =>
-                          data.handleValidate(item.kode_transaksi)
-                        }
-                      >
-                        Validasi
-                      </Button>
+                      <>
+                        <Button
+                          color="primary"
+                          size="sm"
+                          onClick={(e) =>
+                            data.handleValidate(item.kode_transaksi)
+                          }
+                        >
+                          Validasi
+                        </Button>
+                        <Link
+                          className="ml-2 text-sm rounded-lg bg-warning-100 text-warning-800 px-3 py-1.5"
+                          href={
+                            item.jenis_transaksi === "2"
+                              ? `/admin/penjualan/${item.kode_transaksi}/edit`
+                              : `/admin/pembelian/${item.kode_transaksi}/edit`
+                          }
+                          color="primary"
+                        >
+                          Detail
+                        </Link>
+                      </>
                     )}
                   </td>
                 </tr>

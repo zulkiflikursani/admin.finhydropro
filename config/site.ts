@@ -39,6 +39,11 @@ export const siteConfig = {
       label: "Laporan ",
       href: "/admin/laporan_penjualan",
     },
+    {
+      icon: "FaClipboardCheck",
+      label: "Laporan Stok ",
+      href: "/admin/laporan_stok",
+    },
   ],
   navItemsAdmin: [
     {

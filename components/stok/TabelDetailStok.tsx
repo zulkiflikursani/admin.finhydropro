@@ -5,7 +5,6 @@ import { DatePicker } from "@nextui-org/date-picker";
 import { Button } from "@nextui-org/button";
 import { usePathname, useSearchParams } from "next/navigation";
 import { parseDate } from "@internationalized/date"; // or your specific date utility
-import Link from "next/link";
 
 interface TypeDetailTransaksi {
   id: number;
@@ -23,7 +22,7 @@ interface TypeDetailTransaksi {
 interface Props {
   data: TypeDetailTransaksi[] | undefined;
 }
-function TabelDetailTransaksi(props: Props) {
+function TabelDetailStok(props: Props) {
   const searchParam = useSearchParams();
   const pathname = usePathname();
   const params = new URLSearchParams(searchParam);
@@ -111,8 +110,7 @@ function TabelDetailTransaksi(props: Props) {
               <th className="border border-foreground-200">desk</th>
               <th className="border border-foreground-200">qty</th>
               <th className="border border-foreground-200">harga</th>
-              <th className="border border-foreground-200">total</th>
-              <th className="border border-foreground-200">Action</th>
+              {/* <th className="border border-foreground-200">total</th> */}
             </tr>
           </thead>
           <tbody>
@@ -131,27 +129,14 @@ function TabelDetailTransaksi(props: Props) {
                   {item.deksripsi}
                 </td>
                 <td className="text-center border border-foreground-200 ">
-                  {Intl.NumberFormat().format(-item.qty)}
+                  {Intl.NumberFormat().format(item.qty)}
                 </td>
                 <td className="text-center border border-foreground-200 ">
                   {Intl.NumberFormat().format(item.harga)}
                 </td>
-                <td className="text-center border border-foreground-200 ">
+                {/* <td className="text-center border border-foreground-200 ">
                   {Intl.NumberFormat().format(-item.harga * item.qty)}
-                </td>
-                <td className="text-center border border-foreground-200 ">
-                  <Link
-                    href={
-                      item.jenis_transaksi === "2"
-                        ? `/admin/penjualan/${item.kode_transaksi}/edit`
-                        : `/admin/pembelian/${item.kode_transaksi}/edit`
-                    }
-                  >
-                    <Button className="bg-blue " size="sm">
-                      Detail
-                    </Button>
-                  </Link>
-                </td>
+                </td> */}
               </tr>
             ))}
             <tr>
@@ -162,12 +147,12 @@ function TabelDetailTransaksi(props: Props) {
               <td className="text-center border border-foreground-200 ">
                 {Intl.NumberFormat().format(
                   props.data?.reduce((acc, item: TypeDetailTransaksi) => {
-                    return (acc += -item.qty);
+                    return (acc += item.qty);
                   }, 0) || 0
                 )}
               </td>
               <td className="text-center border border-foreground-200 "></td>
-              <td className="text-center border border-foreground-200 ">
+              {/* <td className="text-center border border-foreground-200 ">
                 {Intl.NumberFormat("id-ID", {
                   // Use your desired locale here
                   style: "currency",
@@ -182,7 +167,7 @@ function TabelDetailTransaksi(props: Props) {
                     0
                   ) || 0 // Default to 0 if props.data is undefined or empty
                 )}
-              </td>
+              </td> */}
             </tr>
           </tbody>
         </table>
@@ -191,4 +176,4 @@ function TabelDetailTransaksi(props: Props) {
   );
 }
 
-export default TabelDetailTransaksi;
+export default TabelDetailStok;

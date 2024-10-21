@@ -61,8 +61,8 @@ interface TransaksiDetailType {
   harga: number;
 }
 interface TransaksiDetailDataType {
-  kode_transaksi: string;
   kode_produk: string;
+  nama_produk: string;
   qty: number;
   harga_jual: number;
   harga_beli: number;
