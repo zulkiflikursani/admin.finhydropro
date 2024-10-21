@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PageHeader from "../pageHeader";
 import TableInputPenjualan from "./TableInputPenjualan";
 import { Button } from "@nextui-org/button";
@@ -8,16 +8,18 @@ import { DatePicker } from "@nextui-org/date-picker";
 import { Autocomplete, AutocompleteItem, DateValue } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { createPenjualan } from "@/app/lib/penjualan/action";
+import { parseDate } from "@internationalized/date";
 interface Props {
   produk: ProdukType[] | undefined;
   customer: CustomerType[] | undefined;
+  dataDetailTransaksi?: TransaksiHeaderType[] | null | undefined;
 }
 
 const DataDefault: DetailPenjualanType[] = [
   {
     kode_produk: "",
     nama_produk: "",
-    qty: 1,
+    qty: -1,
     harga_beli: 0,
     harga_jual: 0,
   },
@@ -26,6 +28,7 @@ function FormPenjualan(props: Props) {
   const [tanggalTransaksi, settanggalTransaksi] = useState<DateValue | null>();
   const [desc, setDesc] = useState("");
   const [customer, setCustomer] = useState<string>("");
+  const [customerSelected, setCustomerSelected] = useState<string>("");
   const [dataPenjualan, setdataPenjualan] =
     useState<DetailPenjualanType[]>(DataDefault);
   const [alertState, setAlert] = useState<any>();
@@ -43,7 +46,31 @@ function FormPenjualan(props: Props) {
       },
     ]);
   };
+  useEffect(() => {
+    if (props.dataDetailTransaksi && props.dataDetailTransaksi[0]) {
+      settanggalTransaksi(
+        parseDate(props.dataDetailTransaksi[0].tgl_transaksi)
+      );
+      setDesc(props.dataDetailTransaksi[0].deskripsi);
+      setCustomerSelected(props.dataDetailTransaksi[0].user);
+      const allData = props.dataDetailTransaksi.reduce(
+        (acc: TransaksiDetailDataType[], item) => {
+          return acc.concat(
+            item.data.map((data: TransaksiDetailDataType) => ({
+              kode_produk: data.kode_produk,
+              nama_produk: data.nama_produk,
+              qty: data.qty,
+              harga_beli: data.harga_beli,
+              harga_jual: data.harga_jual,
+            }))
+          );
+        },
+        [] as TransaksiDetailDataType[]
+      );
 
+      setdataPenjualan(allData);
+    }
+  }, [props.dataDetailTransaksi]);
   const session = useSession();
   const handleClickSimpan = async () => {
     const company = session.data?.user.company || "";
@@ -99,7 +126,7 @@ function FormPenjualan(props: Props) {
   function jumlahTransaksi() {
     const data = dataPenjualan.reduce(
       (total: number, v: DetailPenjualanType) =>
-        (total = total + v.harga_jual * v.qty),
+        (total = total + v.harga_jual * -v.qty),
       0
     );
 
@@ -125,15 +152,19 @@ function FormPenjualan(props: Props) {
     });
   }
   function handleDataCumstomer(e: string) {
-    const filteCustomer = (array: CustomerType[]) => {
-      return array.filter((el: CustomerType) => {
-        return el.nama.includes(e);
-      });
-    };
-    if (props.customer !== undefined) {
-      const datacustomer: CustomerType[] = filteCustomer(props.customer);
-      setCustomer(datacustomer[0].email);
+    if (props.customer) {
+      const datacustomer = props.customer.filter((el: CustomerType) =>
+        el.nama.includes(e)
+      );
+      if (datacustomer.length > 0) {
+        setCustomer(e);
+        setCustomerSelected(datacustomer[0].email);
+      }
     }
+  }
+
+  function handleSelectedCustomer(e: string) {
+    setCustomer(e);
   }
   function handleData(e: string, i: number) {
     const filterProduk = (array: ProdukType[]) => {
@@ -216,12 +247,14 @@ function FormPenjualan(props: Props) {
           className="bg-foreground-50 rounded-xl w-60 mt-2"
           label="Customer"
           defaultItems={props.customer}
+          inputValue={customerSelected}
           labelPlacement="inside"
           name={"kode_customer"}
           placeholder="Pilih Customer"
           size="sm"
           variant="bordered"
           onInputChange={(e) => handleDataCumstomer(e)}
+          onChange={(e) => setCustomer(e.target.value)}
         >
           {(item) => (
             <AutocompleteItem key={item.id} textValue={item.nama}>

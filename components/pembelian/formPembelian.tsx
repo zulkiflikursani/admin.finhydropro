@@ -3,7 +3,7 @@ import { DatePicker } from "@nextui-org/date-picker";
 import { DateValue } from "@nextui-org/react";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 import PageHeader from "../pageHeader";
@@ -11,9 +11,11 @@ import PageHeader from "../pageHeader";
 import TableInputPembelian from "./tableInputPembelian";
 
 import { createPembelian } from "@/app/lib/pembelian/action";
+import { parseDate } from "@internationalized/date";
 
 interface Props {
   produk: ProdukType[] | undefined;
+  dataDetailTransaksi?: TransaksiHeaderType[] | null | undefined;
 }
 
 const DataDefault: DetailPembelianType[] = [
@@ -35,8 +37,8 @@ const defaultDataSave: TransaksiHeaderType = {
   user: "",
   data: [
     {
-      kode_transaksi: "",
       kode_produk: "",
+      nama_produk: "",
       qty: 0,
       harga_beli: 0,
       harga_jual: 0,
@@ -63,18 +65,40 @@ function FormPembelian(props: Props) {
       },
     ]);
   };
+  useEffect(() => {
+    if (props.dataDetailTransaksi && props.dataDetailTransaksi[0]) {
+      settanggalTransaksi(
+        parseDate(props.dataDetailTransaksi[0].tgl_transaksi)
+      );
+      setDesc(props.dataDetailTransaksi[0].deskripsi);
+      const allData = props.dataDetailTransaksi.reduce(
+        (acc: TransaksiDetailDataType[], item) => {
+          return acc.concat(
+            item.data.map((data: TransaksiDetailDataType) => ({
+              kode_produk: data.kode_produk,
+              nama_produk: data.nama_produk,
+              qty: data.qty,
+              harga_beli: data.harga_beli,
+              harga_jual: data.harga_jual,
+            }))
+          );
+        },
+        [] as TransaksiDetailDataType[]
+      );
+
+      setdataPemelian(allData);
+    }
+  }, [props.dataDetailTransaksi]);
 
   const session = useSession();
   const handleClickSimpan = async () => {
     const company = session.data?.user.company || "";
     const user = session.data?.user.email || "";
     const tanggal = tanggalTransaksi?.toString() || "";
-
     const dataDetail = dataPemelian.map((item) => ({
       ...item,
       kode_transaksi: "",
       kode_produk: item.kode_produk,
-
       qty: Number(item.qty),
       harga: Number(item.harga_beli),
     }));
@@ -97,6 +121,7 @@ function FormPembelian(props: Props) {
       if (create.status === "ok") {
         setAlert(create.message);
         setDesc("");
+
         setdataPemelian([]);
       } else {
         const errorjson = await JSON.parse(create.message);

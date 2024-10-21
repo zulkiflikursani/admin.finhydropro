@@ -89,9 +89,9 @@ const Login = (props: Props) => {
                     <Button className="bg-primary-foreground" type="submit">
                       Login
                     </Button>
-                    <Button className="bg-primary-foreground">
+                    {/* <Button className="bg-primary-foreground">
                       Registrasi
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
               </div>

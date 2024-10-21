@@ -6,7 +6,7 @@ import { FaTrashAlt } from "react-icons/fa";
 
 interface Props {
   produk: ProdukType[] | undefined;
-  dataPenjualan: DetailPembelianType[];
+  dataPenjualan: DetailPenjualanType[];
   handleData: (e: string, i: number) => void;
   handleChangeQty: (e: number, i: number) => void;
   handleChangeHjual: (e: number, i: number) => void;
@@ -14,6 +14,7 @@ interface Props {
 }
 
 function TableInputPenjualan(props: Props) {
+  console.log(props.dataPenjualan);
   return (
     <div>
       <table className="w-full">
@@ -36,11 +37,17 @@ function TableInputPenjualan(props: Props) {
                   className="bg-foreground-50 rounded-xl"
                   defaultItems={props.produk}
                   labelPlacement="inside"
+                  inputValue={
+                    row.nama_produk !== undefined
+                      ? row?.nama_produk.toString()
+                      : "0"
+                  }
                   name={"kode_produk"}
                   placeholder="Pilih Produk"
                   size="sm"
                   variant="bordered"
                   onInputChange={(e) => props.handleData(e, i)}
+                  onChange={(e) => props.handleData(e.target.value, i)}
                 >
                   {(item) => (
                     <AutocompleteItem
@@ -57,9 +64,7 @@ function TableInputPenjualan(props: Props) {
               </td>
               <td>
                 <Input
-                  defaultValue={
-                    row.qty !== undefined ? row.qty.toString() : "0"
-                  }
+                  value={row.qty !== undefined ? (-row.qty).toString() : "0"}
                   name="qty"
                   size="sm"
                   type="number"
@@ -103,7 +108,7 @@ function TableInputPenjualan(props: Props) {
                   name="total_harga"
                   size="sm"
                   type="number"
-                  value={(row.harga_jual * row.qty).toString()}
+                  value={(row.harga_jual * -row.qty).toString()}
                 />
               </td>
               <td>
