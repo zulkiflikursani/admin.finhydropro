@@ -143,7 +143,9 @@ function TabelDetailStok(props: Props) {
               <td
                 colSpan={4}
                 className="text-center border border-foreground-200 "
-              ></td>
+              >
+                Sisa Stok
+              </td>
               <td className="text-center border border-foreground-200 ">
                 {Intl.NumberFormat().format(
                   props.data?.reduce((acc, item: TypeDetailTransaksi) => {

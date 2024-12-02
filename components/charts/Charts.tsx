@@ -37,6 +37,8 @@ const chartConfig = {
 
 interface Props {
   data: any;
+  title: any;
+  isi_chart: "P" | "J" | "PJ";
 }
 export function Charts(props: Props) {
   console.log(props.data);
@@ -67,7 +69,7 @@ export function Charts(props: Props) {
   return (
     <div className="flex container justify-center items-center ">
       <div className="flex flex-col items-center">
-        <h1 className="font-bold">Trend Produksi Dan Penjualan</h1>
+        <h1 className="font-bold">{props.title} </h1>
         <ChartContainer
           config={chartConfig}
           className="md:min-h-[300px] md:min-w-[full] min-h-[200px]"
@@ -82,8 +84,22 @@ export function Charts(props: Props) {
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey="Produksi" fill="var(--color-mobile)" radius={4} />
-            <Bar dataKey="Penjualan" fill="var(--color-desktop)" radius={4} />
+            {props.isi_chart === "P" && (
+              <Bar dataKey="Produksi" fill="var(--color-mobile)" radius={4} />
+            )}
+            {props.isi_chart === "J" && (
+              <Bar dataKey="Penjualan" fill="var(--color-desktop)" radius={4} />
+            )}
+            {props.isi_chart === "PJ" && (
+              <>
+                <Bar dataKey="Produksi" fill="var(--color-mobile)" radius={4} />
+                <Bar
+                  dataKey="Penjualan"
+                  fill="var(--color-desktop)"
+                  radius={4}
+                />
+              </>
+            )}
           </BarChart>
         </ChartContainer>
       </div>
